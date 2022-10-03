@@ -1,5 +1,3 @@
-import sys
-
 class Node:
     def __init__(self, value) -> None:
         self.value = value
@@ -10,22 +8,22 @@ class Node:
 
 class LinkedList:
     def __init__(self) -> None:
-        self.first = None
-        self.last = None
+        self.head = None
+        self.tail = None
         self.size = 0
 
     def isEmpty(self):
-        return self.first == None
+        return self.head == None
 
     def addLast(self, item):
         """ Add item at last index """
         node = Node(item)
 
         if self.isEmpty():
-            self.first = self.last = node
+            self.head = self.tail = node
         else:
-            self.last.next = node
-            self.last = node 
+            self.tail.next = node
+            self.tail = node 
         
         self.size += 1      
 
@@ -34,16 +32,16 @@ class LinkedList:
         node = Node(item)
         
         if self.isEmpty():
-            self.first = self.last = node
+            self.head = self.tail = node
         else:
-            node.next = self.first
-            self.first = node
+            node.next = self.head
+            self.head = node
 
         self.size += 1
 
     def indexOf(self, item) -> int:
         index = 0
-        current  = self.first
+        current  = self.head
         while(current):
             if current.value == item:
                 return index
@@ -53,7 +51,7 @@ class LinkedList:
 
     def contains(self, item) -> bool:
         """ Return True if LinkedList object contains item """
-        current = self.first
+        current = self.head
         while current:
             if current.value == item:
                 return True
@@ -66,7 +64,7 @@ class LinkedList:
 
     def __str__(self) -> str:
         result = '['
-        current = self.first
+        current = self.head
         while(current):
             result += ('' if result == '[' else ", ") + str(current.value)
             current = current.next
@@ -79,17 +77,17 @@ class LinkedList:
             raise ValueError
         
         # Have one element
-        if self.first == self.last:
-            self.first = self.last = None
+        if self.head == self.tail:
+            self.head = self.tail = None
             return
 
-        current = self.first
+        current = self.head
         while current:
-            if current.next == self.last:
+            if current.next == self.tail:
                 break
             current = current.next
         current.next = None
-        self.last = current
+        self.tail = current
 
         # decrement the size
         self.size -= 1
@@ -98,19 +96,19 @@ class LinkedList:
         if self.isEmpty():
             raise ValueError
 
-        if self.first == self.last:
-            self.first = self.last = None
+        if self.head == self.tail:
+            self.head = self.tail = None
             return
 
-        second = self.first.next
-        self.first.next = None
-        self.first = second
+        second = self.head.next
+        self.head.next = None
+        self.head = second
 
         self.size -= 1
         
     def toList(self):
         result = []
-        current = self.first
+        current = self.head
 
         while current:
             result.append(current.value)
@@ -119,10 +117,10 @@ class LinkedList:
         return result
 
     def reverse(self):
-        self.last = self.first
+        self.tail = self.head
         c1 = None
         c2 = None
-        current = self.first
+        current = self.head
 
         while current != None:
             c1 = c2
@@ -130,19 +128,19 @@ class LinkedList:
             current = current.next
 
             c2.next = c1
-        self.first = c2
+        self.head = c2
     
     def getFirst(self):
-        if self.size == 0: return "empty"
-        return self.first.value
+        if self.size == 0: return
+        return self.head.value
     
     def getLast(self):
-        if self.size == 0: return "empty"
-        return self.last.value
+        if self.size == 0: return
+        return self.tail.value
 
     def getAt(self, index):
         counter = 0
-        current = self.first
+        current = self.head
         if index < 0 or index >= self.size: return "Invalid index"
         while current:
             if counter == index: return current.value
@@ -151,7 +149,7 @@ class LinkedList:
 
     def sum(self):
         sum = 0
-        current = self.first
+        current = self.head
         while current:
             sum += current.value
             current = current.next
@@ -161,8 +159,8 @@ class LinkedList:
         if self.isEmpty():
             return "List is empty"
         
-        max = self.first.value
-        current = self.first
+        max = self.head.value
+        current = self.head
 
         while current:
             if current.value > max:
@@ -173,13 +171,13 @@ class LinkedList:
 
     def moveToHead(self, key):
         prev = None
-        curr = self.first
+        curr = self.head
 
         while curr:
             if key == curr.value:
                 prev.next = curr.next
-                curr.next = self.first
-                self.first = curr
+                curr.next = self.head
+                self.head = curr
             prev = curr
             curr = curr.next
 
@@ -187,27 +185,66 @@ class LinkedList:
         node = Node(item)
         # O(1)
         if index == 0:
-            node.next = self.first
-            self.first = node
+            node.next = self.head
+            self.head = node
             return
         
-        current = self.first
+        current = self.head
 
         for i in range(index-1):
             current = current.next
 
         node.next = current.next
         current.next = node
+    
+    def removeDuplicatesFromSortedList(self):
+        current = self.head
+        forward = self.head.next
 
+        while forward:
+            if current.value == forward.value:
+                current.next = forward.next
+                forward = current.next
+            else:
+                current = current.next
+                forward = forward.next
+        
+    def oddEvenList(self):
+        odd = LinkedList()
+        even = LinkedList()
+        while self.size > 0:
+            val = self.getFirst()
+            self.removeFirst()
+            if val % 2: odd.addLast(val)
+            else: even.addLast(val)
+        odd.tail.next = even.head
+        self.head = odd.head
+        self.tail = even.tail
+        self.size = odd.size + even.size
 
+    def reverseKGroup(self):
+        pass
+    
+    def getMiddle(self):
+        slow = self.head
+        fast = self.head
 
-
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow.value
 # Driver code
 list = LinkedList()
 
-list.addLast(10)
-list.addLast(20)
-list.addLast(30)
+list.addLast(2)
+list.addLast(9)
+list.addLast(7)
+list.addLast(8)
+list.addLast(1)
+list.addLast(6)
+list.addLast(5)
 
-list.insert(1, 5)
+
+print(list.getMiddle())
+
 print(list)

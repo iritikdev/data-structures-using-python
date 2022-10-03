@@ -1,4 +1,5 @@
 from os import remove
+from turtle import left
 
 
 class Node:
@@ -127,22 +128,10 @@ class BinarySearchTree:
         return left + right
 
     def sumOfLeaves(self,root):
-        if root is None:
-            return 0
-        if root.left is None and root.right is None:
-            return root.data
+        if root is None: return 0
+        if root.left is None and root.right is None: return root.data
         return self.sumOfLeaves(root.left) + self.sumOfLeaves(root.right)
 
-    def sumRootToLeaf(self,root):
-        if root is None:
-            return 0
-        if root.left is None and root.right is None:
-            return root.data
-        left  = self.sumOfLeaves(root.left)
-        right  = self.sumOfLeaves(root.right)
-
-        return left + right
-        
     def size(self,root):
         if root is None:
             return 0
@@ -238,18 +227,7 @@ class BinarySearchTree:
                 current = current.left
         return ceil
 
-    def leftMostElement(self,root):
-
-        if root.left is None and root.right is None:
-            return root.data
-
-        left = self.leftMostElement(root.left)
-
-        print(left)
-
-        items = []
-        items.e
-
+    
 
 
 
@@ -259,15 +237,17 @@ def main():
 
     tree = BinarySearchTree()
 
-    tree.insertNode(7)
-    tree.insertNode(4)
-    tree.insertNode(9)
-    tree.insertNode(5)
-    tree.insertNode(10)
-    tree.insertNode(11)
+    tree.insert(4)
+    tree.insert(2)
+    tree.insert(6)
+    tree.insert(1)
+    tree.insert(3)
+    tree.insert(5)
+    tree.insert(7)
+
+    print(tree.sumRootToLeaf(tree.root))
     
 
-    print(tree.leftMostElement(tree.root))
 
 if __name__ == '__main__':
     main()

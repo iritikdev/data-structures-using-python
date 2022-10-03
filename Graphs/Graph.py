@@ -55,16 +55,30 @@ class Graph:
             if len(destination) != 0:
                 print(source, "is connected with", destination)
 
+    def traverseDepthFirst(self, root):
+        node = self.nodes.get(root)
+        if node is None:
+            return
+        self._traverseDepthFirst(node, set())
+
+    def _traverseDepthFirst(self, root, visited):
+        print(root, end=" ")
+        visited.add(root)
+        for node in self.adjancencyList.get(root):
+            if not visited.__contains__(node):
+                self._traverseDepthFirst(node, visited)
+
 
 graph = Graph()
 graph.addNode("A")
 graph.addNode("B")
 graph.addNode("C")
+graph.addNode("D")
 
 
 graph.addEdge("A", "B")
 graph.addEdge("A", "C")
+graph.addEdge("B", "D")
+graph.addEdge("D", "C")
 
-graph.removeNode('A')
-
-graph.print()
+graph.traverseDepthFirst("M")
